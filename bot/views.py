@@ -38,7 +38,10 @@ bot.setWebhook('https://klishin16.pythonanywhere.com/bot/bot/{bot_token}/'.forma
 print(bot.getMe())
 
 current_profession = ""
+current_city = ""
 cur_page = 0 #текущая страница в списке кандидатов
+
+persons_on_page = 2 #число кандидатов на одной странице списка
 
 @csrf_exempt
 def inc(request, bot_token):
@@ -46,7 +49,7 @@ def inc(request, bot_token):
     print(request.body.decode('utf-8'))
     hook.run_as_thread()
     hook.feed(payload)
-    time.sleep(3)
+    time.sleep(3)   
     return JsonResponse({}, status=200)
 
 def on_chat_message(msg):
@@ -123,22 +126,52 @@ def on_callback_query(msg):
     #print ('Callback Query:', query_id, from_id, query_data)
     bot.answerCallbackQuery(query_id, text='Got it!')
     if ("city_" in query_data):
-        query = Summary.objects.filter(city=query_data[5:])
+
+        global current_city
+        global cur_page
+        global persons_on_page  
+
+        if (query_data[5:] != "back_page" and query_data[5:] != "next_page"):
+            if (current_city != query_data[5:]): #если текущий город еще не выбран
+                current_city = query_data[5:]
+                cur_page = 0 #сбрасываем страницы вывода на 1
+        elif (query_data[11:] == "back_page"):
+            cur_page = cur_page - 1
+            if (cur_page < 0): cur_page = 0
+        else:
+            cur_page = cur_page + 1
+
+        query = Summary.objects.filter(city=current_city)
+            
         if not query:
             bot.sendMessage(from_id, "К сожалению ничего не найдено")
         else:
-            profiles_list = []
+            pages_list = []
+            profiles_on_page_list = []
+            persons_num = 0
             for profile in query:
-                profiles_list.append([InlineKeyboardButton(text="{0} {1} \n{2}".format(profile.name, profile.second, profile.title), callback_data="person_{0}_{1}".format(profile.name, profile.second))])
-                #pass
+                if (persons_num < persons_on_page):
+                    profiles_on_page_list.append([InlineKeyboardButton(text="{0} {1} \n{2}".format(profile.name, profile.second, profile.title), callback_data="person_{0}_{1}".format(profile.name, profile.second))])
+                    persons_num = persons_num + 1
+                else:
+                    pages_list.append(profiles_on_page_list)
+                    profiles_on_page_list = []
+                    profiles_on_page_list.append([InlineKeyboardButton(text="{0} {1} \n{2}".format(profile.name, profile.second, profile.title), callback_data="person_{0}_{1}".format(profile.name, profile.second))])
+                    persons_num = 1
+            if (persons_num > 0):
+                pages_list.append(profiles_on_page_list)
 
-            city_keyboard = InlineKeyboardMarkup(inline_keyboard=profiles_list)
-            bot.sendMessage(from_id, "Результаты по запросу: {}".format(query_data[5:]), reply_markup=city_keyboard)
+            page = pages_list[cur_page]
+            control_buttons = [InlineKeyboardButton(text="⬅", callback_data="city_back_page"), InlineKeyboardButton(text="{0} из {1}".format(cur_page + 1, len(pages_list)), callback_data="page_info"), InlineKeyboardButton(text="➡", callback_data="city_next_page")]
+            page.append(control_buttons)
+            persons_keyboard = InlineKeyboardMarkup(inline_keyboard=page)
+
+            bot.sendMessage(from_id, "Результаты по запросу:                  {}".format(query_data[11:]), reply_markup=persons_keyboard)
 
     elif ("profession_" in query_data):
 
-        global current_profession
-        global cur_page
+        #global current_profession
+        #global cur_page
         if (query_data[11:] != "back_page" and query_data[11:] != "next_page"):
             if (current_profession != query_data[11:]): #если текущая профессия еще не выбрана
                 current_profession = query_data[11:]
@@ -152,7 +185,7 @@ def on_callback_query(msg):
 
         query = Summary.objects.filter(title=current_profession)
 
-        persons_on_page = 2
+        #global persons_on_page  
         if not query:
             bot.sendMessage(from_id, "К сожалению ничего не найдено")
         else:
