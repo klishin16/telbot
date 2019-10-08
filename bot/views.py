@@ -146,7 +146,7 @@ def on_callback_query(msg):
         else:
             cur_page = cur_page + 1
 
-        query = Summary.objects.filter(title=query_data[11:])
+        query = Summary.objects.filter(title=current_profession)
 
         persons_on_page = 2;
         if not query:
