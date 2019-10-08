@@ -38,6 +38,7 @@ bot.setWebhook('https://klishin16.pythonanywhere.com/bot/bot/{bot_token}/'.forma
 print(bot.getMe())
 
 current_profession = ""
+cur_page = 0 #текущая страница в списке кандидатов
 
 @csrf_exempt
 def inc(request, bot_token):
@@ -136,10 +137,13 @@ def on_callback_query(msg):
 
     elif ("profession_" in query_data):
 
-        cur_page = 0
         global current_profession
+        global cur_page
         if (query_data[11:] != "back_page" and query_data[11:] != "next_page"):
-            current_profession = query_data[11:]
+            if (current_profession != query_data[11:]): #если текущая профессия еще не выбрана
+                current_profession = query_data[11:]
+                cur_page = 0 #сбрасываем страницы вывода на 1
+            
         elif (query_data[11:] == "back_page"):
             cur_page = cur_page - 1
             if (cur_page < 0): cur_page = 0
