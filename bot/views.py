@@ -135,7 +135,7 @@ def on_callback_query(msg):
             if (current_city != query_data[5:]): #если текущий город еще не выбран
                 current_city = query_data[5:]
                 cur_page = 0 #сбрасываем страницы вывода на 1
-        elif (query_data[11:] == "back_page"):
+        elif (query_data[5:] == "back_page"):
             cur_page = cur_page - 1
             if (cur_page < 0): cur_page = 0
         else:
