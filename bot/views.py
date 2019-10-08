@@ -148,7 +148,7 @@ def on_callback_query(msg):
 
         query = Summary.objects.filter(title=current_profession)
 
-        persons_on_page = 2;
+        persons_on_page = 2
         if not query:
             bot.sendMessage(from_id, "К сожалению ничего не найдено")
         else:
@@ -168,7 +168,7 @@ def on_callback_query(msg):
                 pages_list.append(profiles_on_page_list)
 
             page = pages_list[cur_page]
-            control_buttons = [InlineKeyboardButton(text="<-", callback_data="profession_back_page"), InlineKeyboardButton(text="{0} из {1}".format(cur_page + 1, len(pages_list)), callback_data="page_info"), InlineKeyboardButton(text="➡", callback_data="profession_next_page")]
+            control_buttons = [InlineKeyboardButton(text="⬅", callback_data="profession_back_page"), InlineKeyboardButton(text="{0} из {1}".format(cur_page + 1, len(pages_list)), callback_data="page_info"), InlineKeyboardButton(text="➡", callback_data="profession_next_page")]
             page.append(control_buttons)
             persons_keyboard = InlineKeyboardMarkup(inline_keyboard=page)
 
