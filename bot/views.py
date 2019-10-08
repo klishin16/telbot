@@ -37,7 +37,7 @@ bot = telepot.Bot(settings.TELEGRAM_BOT_TOKEN)
 bot.setWebhook('https://klishin16.pythonanywhere.com/bot/bot/{bot_token}/'.format(bot_token="blat"),  max_connections=3)
 print(bot.getMe())
 
-pr = ""
+current_profession = ""
 
 @csrf_exempt
 def inc(request, bot_token):
@@ -137,12 +137,14 @@ def on_callback_query(msg):
     elif ("profession_" in query_data):
 
         cur_page = 0
-        global pr
-        if (pr == query_data[11:]):
-            cur_page = cur_page + 1
+        global current_profession
+        if (query_data[11:] != "back_page" and query_data[11:] != "next_page"):
+            current_profession = query_data[11:]
+        elif (query_data[11:] == "back_page"):
+            cur_page = cur_page - 1
+            if (cur_page < 0): cur_page = 0
         else:
-            cur_page = 0
-            pr = query_data[11:]
+            cur_page = cur_page + 1
 
         query = Summary.objects.filter(title=query_data[11:])
 
@@ -166,7 +168,7 @@ def on_callback_query(msg):
                 pages_list.append(profiles_on_page_list)
 
             page = pages_list[cur_page]
-            control_buttons = [InlineKeyboardButton(text="❌", callback_data="close"), InlineKeyboardButton(text="{0} из {1}".format(cur_page + 1, len(pages_list)), callback_data="page_info"), InlineKeyboardButton(text="➡", callback_data="profession_{}".format(pr))]
+            control_buttons = [InlineKeyboardButton(text="<-", callback_data="profession_back_page"), InlineKeyboardButton(text="{0} из {1}".format(cur_page + 1, len(pages_list)), callback_data="page_info"), InlineKeyboardButton(text="➡", callback_data="profession_next_page"]
             page.append(control_buttons)
             persons_keyboard = InlineKeyboardMarkup(inline_keyboard=page)
 
