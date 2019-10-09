@@ -24,7 +24,4 @@ def webhook(request):
 
         #origin.pull()
         #проверка dfd
-
-        return 'Updated Pythonanywhere successfully', 200
-    else:
-        return 'Wrong event type', 400
+        return HttpResponse('pong')
