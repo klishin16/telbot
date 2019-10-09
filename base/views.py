@@ -23,7 +23,7 @@ def webhook(request):
         #origin = repo.remotes.origin
 
         #origin.pull()
-        #проверка
+        #проверка dfd
 
         return 'Updated Pythonanywhere successfully', 200
     else:
