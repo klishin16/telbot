@@ -16,12 +16,4 @@ def index(request):
 
 @csrf_exempt
 def webhook(request):
-    if request.method == 'GET':
-        return HttpResponse("This path you can update server by POST requst")
-    if request.method == 'POST':
-        #repo = git.Repo('../')
-        #origin = repo.remotes.origin
-
-        #origin.pull()
-        #проверка dfdvcv
-        return HttpResponse('pong')
+    return HttpResponse('pong')
