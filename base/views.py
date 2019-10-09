@@ -12,7 +12,7 @@ class PersonsList(ListView):
     template_name="persons.html"
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index. Update! 7!!!")
+    return HttpResponse("Hello, world. You're at the polls index. Update! 9!!!")
 
 @csrf_exempt
 def webhook(request):
