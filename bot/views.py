@@ -37,7 +37,7 @@ bot = telepot.Bot(settings.TELEGRAM_BOT_TOKEN)
 bot.setWebhook('https://klishin16.pythonanywhere.com/bot/bot/{bot_token}/'.format(bot_token="blat"),  max_connections=3)
 print(bot.getMe())
 
-current_profession = ""
+current_profession = "" #текущая профессия
 current_city = ""
 cur_page = 0 #текущая страница в списке кандидатов
 
