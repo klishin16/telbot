@@ -17,10 +17,10 @@ def webhook(request):
     if request.method == 'GET':
         return HttpResponse("This path you can update server by POST requst")
     if request.method == 'POST':
-        repo = git.Repo('../')
-        origin = repo.remotes.origin
+        #repo = git.Repo('../')
+        #origin = repo.remotes.origin
 
-        origin.pull()
+        #origin.pull()
         return 'Updated Pythonanywhere successfully', 200
     else:
         return 'Wrong event type', 400
