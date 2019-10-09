@@ -28,4 +28,3 @@ def webhook(request):
         return 'Updated Pythonanywhere successfully', 200
     else:
         return 'Wrong event type', 400
-x
