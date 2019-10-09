@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from django.views.generic import ListView
 from .models import Person
@@ -13,6 +14,7 @@ class PersonsList(ListView):
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index. Update!")
 
+@csrf_exempt
 def webhook(request):
     if request.method == 'GET':
         return HttpResponse("This path you can update server by POST requst")
@@ -22,7 +24,8 @@ def webhook(request):
 
         #origin.pull()
         #проверка
-        
+
         return 'Updated Pythonanywhere successfully', 200
     else:
         return 'Wrong event type', 400
+x
