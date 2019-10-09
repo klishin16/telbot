@@ -23,5 +23,5 @@ def webhook(request):
         #origin = repo.remotes.origin
 
         #origin.pull()
-        #проверка dfd
+        #проверка dfdvcv
         return HttpResponse('pong')
