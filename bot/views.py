@@ -128,6 +128,7 @@ def on_callback_query(msg):
     if ("city_" in query_data):
 
         global current_city
+        global current_profession
         global cur_page
         global persons_on_page  
 
@@ -170,7 +171,6 @@ def on_callback_query(msg):
 
     elif ("profession_" in query_data):
 
-        #global current_profession
         #global cur_page
         if (query_data[11:] != "back_page" and query_data[11:] != "next_page"):
             if (current_profession != query_data[11:]): #если текущая профессия еще не выбрана
