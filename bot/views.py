@@ -40,6 +40,7 @@ print(bot.getMe())
 current_profession = "" #текущая профессия
 current_city = ""
 cur_page = 0 #текущая страница в списке кандидатов
+last_message_id =
 
 persons_on_page = 2 #число кандидатов на одной странице списка
 
@@ -122,6 +123,8 @@ def on_inline_query(msg):
 
 def on_callback_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+
+    telepot.deleteMessage(telepot.message_identifier(msg)) #возможное улучшение
     #content_type, chat_type, chat_id = telepot.glance(msg)
     #print ('Callback Query:', query_id, from_id, query_data)
     bot.answerCallbackQuery(query_id, text='Got it!')
