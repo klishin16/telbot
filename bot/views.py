@@ -40,7 +40,7 @@ print(bot.getMe())
 current_profession = "" #текущая профессия
 current_city = ""
 cur_page = 0 #текущая страница в списке кандидатов
-last_message_id =
+last_message_id = ""
 
 persons_on_page = 2 #число кандидатов на одной странице списка
 
